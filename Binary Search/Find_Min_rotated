@@ -1,0 +1,63 @@
+//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+//
+class Solution {
+public:
+    int findMin(vector<int>& arr) {
+        int high=arr.size()-1,low=0,mid;
+        
+        if(high==-1){
+            return -1;
+        }
+        
+        if(high==0){
+            return arr[low];
+        }
+        
+        if(arr[low]<arr[high]){    //== nhi h coz 7 1 2 3 4 5 6 7
+            return arr[low];
+        }
+        
+        while(low<high){
+            mid=(high+low)/2;
+            if(arr[mid]<arr[mid+1] && arr[mid]<arr[mid-1]){
+                return arr[mid];
+            }
+            if(arr[mid+1]<arr[mid]){
+                return arr[mid+1];
+            }
+            if(arr[low]<=arr[mid]){
+                low=mid+1;
+            }
+            else{
+                high=mid-1;
+            }
+        }
+        return arr[low]; // required if ye mid+1 wala check nhi hota
+    }
+};
+
+
+
+/*
+
+TEST CASES
+
+0 1 2 3 4 5 6 7 
+    
+1 2 3 4 5 6 7 8
+    
+8 1 2 3 4 5 6 7
+    
+7 8 1 2 3 4 5 6
+    
+6 7 8 1 2 3 4 5
+    
+5 6 7 8 1 2 3 4
+    
+4 5 6 7 8 9 10 3
+
+3 4 5 6 1 2 3 
+
+7 1 2 3 4 5 6 7
+
+*/
