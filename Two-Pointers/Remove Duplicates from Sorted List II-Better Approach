@@ -1,0 +1,35 @@
+//https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+//Better Approach than previous
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        
+        ListNode* extrahead=new ListNode(0,head);
+        ListNode*temp=head,*prev=extrahead;
+        
+        while(temp){
+        
+            if(temp->next!=NULL && temp->val==temp->next->val){
+                while(temp->next!=NULL && temp->val==temp->next->val){
+                     temp=temp->next;
+                }
+                prev->next=temp->next;
+            }
+             else   {
+                prev=prev->next; // for continous duplicates as in last tet case 4 4 occurs just after 3 3. Therefore we do not update prev if if block is executed taaki prev 
+                                   // remains at 2  only for  4 4 also.
+            }  
+            
+            temp=temp->next;
+            }
+        
+        return extrahead->next;
+    }
+    
+    /*Test case
+    1 1 2
+    1 1 1 2 3 4
+    1 2 3 3 4 4 5
+    
+    */
