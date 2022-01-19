@@ -1,0 +1,44 @@
+//https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+     if(head==NULL || head->next==NULL){
+         return head;
+     }
+      ListNode *temp=head,*tail,*newhead=NULL,*prev=NULL;
+      int count=0;
+      while(temp->next!=NULL){
+          if(temp->val!=temp->next->val && (count==0 || temp->val!=prev->val)){
+              count=1;
+              if(newhead==NULL){
+                  newhead=new ListNode(temp->val);
+                  tail=newhead;
+              }
+              else{
+                  tail->next=new ListNode(temp->val);
+                  tail=tail->next;
+              }
+          }
+          prev=temp;
+          temp=temp->next;
+          count=1;//Testcase 1
+      }
+        if(temp->val!=prev->val){
+            if(newhead==NULL){
+                newhead=new ListNode(temp->val);//Test case 2
+            }
+            else{            
+                tail->next=new ListNode(temp->val);
+            }
+        }
+        return newhead;
+    }
+    
+    /*Test cases
+    
+    1 1 1 2 3 4 -> helped to set count=1 in outerloop only if the head has been traversed.. takki last vala 1 is not included.
+    1 1 2 ->newhead if -condition in last block is added beacuse of this test case XD
+    1 2 3 3 4 4 5
+    
+    */
