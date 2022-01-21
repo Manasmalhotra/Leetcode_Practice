@@ -1,0 +1,32 @@
+//https://leetcode.com/problems/interval-list-intersections/
+
+vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
+       
+        int n=firstList.size(),m=secondList.size(),low,high;
+        vector<vector<int> >result;
+        int i=0,j=0;
+        while(i<n && j<m){
+           low=max(firstList[i][0],secondList[j][0]);
+           high=min(firstList[i][1],secondList[j][1]);
+           if(low<=high){
+               result.push_back({low,high});
+           }
+           if(firstList[i][1]<secondList[j][1]){
+               i++;
+           }
+            else{
+                j++;
+            }
+        }
+        return result;
+    }
+    
+    /*Test Case
+    Test case 1: [[1,3],[5,9]] list 2=[[]]
+    O/p:[]
+    
+    Test case 2: firstList = [[0,2],[5,10],[13,23],[24,25]], secondList = [[1,5],[8,12],[15,24],[25,26]]
+    Output: [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]
+    
+    TestCase 3: firstList=[[0,4],[6,7],[8,12]] secondList=[[1,5],[6,7],[13,15]]
+    O/P: [[1,4],[6,7]]
