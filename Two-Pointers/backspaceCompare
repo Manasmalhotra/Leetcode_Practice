@@ -1,0 +1,56 @@
+//https://leetcode.com/problems/backspace-string-compare/
+//backspace moves backwards therefore consider movemement from right to left for comparision..
+
+ bool backspaceCompare(string s, string t) {
+int i,n=s.length(),m=t.length(),skip=0;
+string ans="",ans1="";
+for(i=n-1;i>=0;i--){
+    if(s[i]=='#'){
+        skip++;
+    }
+    else if(skip>0){
+        skip--;
+    }
+    else{
+        ans+=s[i];
+    }
+}
+        
+skip=0;
+        
+for(i=m-1;i>=0;i--){
+    if(t[i]=='#'){
+        skip++;
+    }
+    else if(skip>0){
+        skip--;
+    }
+    else{
+        ans1+=t[i];
+    }
+}
+if(ans.compare(ans1)==0){
+    return true;
+}
+return false;
+}
+
+/*Test Cases*/
+x=ab##
+y=c#d#
+O/p:1
+
+Test case 2
+x=ab#c
+y=ad#c
+O/P: 1
+
+Test case 3
+x=bxj##tw
+y=bxj###tw
+O/p:0
+
+Testcase4
+x=adf###bcd#
+y=add#b##cd#
+O/p:0
