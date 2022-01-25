@@ -1,0 +1,28 @@
+//https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
+
+class Solution {
+public:
+    void dfs(Node*root){
+        if(root!=NULL){
+            if(root->left!=NULL){
+                root->left->next=root->right;
+            }
+        }
+        if(root->left!=NULL){
+            dfs(root->left);
+        }
+        if(root->right!=NULL){
+            dfs(root->right);
+        }
+    }
+    
+    Node* connect(Node* root) {
+       if(root==NULL)
+       {
+           return root;
+       } 
+        
+       dfs(root);
+       return root;
+    }
+};
