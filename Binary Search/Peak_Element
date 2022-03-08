@@ -12,8 +12,8 @@ public:
                  return mid;
              }
              else if(arr[mid+1]>arr[mid]){
-                 low=mid+1;
-             }
+                 low=mid+1;    //Agar mid peak element nhi hai matlab uska ek neighbour usse chhota hai,so we move to side which has greater element than mid.And,agar dono side
+             }                 //elements bade h mid se toh kisi bhi side jao you will get it.
              else{
                  high=mid-1;
              }
