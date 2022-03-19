@@ -1,0 +1,38 @@
+//https://leetcode.com/problems/permutations-ii/
+class Solution {
+public:
+    map<int,int>maps;
+
+    void backtrack(vector<int>&permute,int n,vector<vector<int>>&results){
+        if(permute.size()==n){
+            results.push_back(permute);
+            return;
+        }
+        
+        map<int,int>::iterator it;
+        for(it=maps.begin();it!=maps.end();it++){
+            int num=it->first;
+            int count=it->second;
+            if(count==0){
+                continue;
+            }
+            permute.push_back(num);
+            maps[num]=count-1;
+            backtrack(permute,n,results);
+            permute.pop_back();
+            maps[num]=count;
+        }
+        
+    }
+    
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        int i,n=nums.size();
+        for(i=0;i<n;i++){
+            maps[nums[i]]+=1;
+        }
+        vector<vector<int>>results;
+        vector<int>permute;
+        backtrack(permute,n,results);
+        return results;
+    }
+};
