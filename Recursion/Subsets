@@ -1,0 +1,26 @@
+//https://leetcode.com/problems/subsets/solution/
+//Include subset in 1 of the sets ,then remove the element and then call for the next element to include it and not include it.
+
+class Solution {
+public:
+    void subset_gen(vector<vector<int> >&result,vector<int>&subset,vector<int>nums){
+        
+        if(nums.size()==0){
+            result.push_back(subset);
+            return;
+        }
+        vector<int>sub1(subset);
+        vector<int>sub2(subset);
+        sub2.push_back(nums[0]);
+        nums.erase(nums.begin());
+        subset_gen(result,sub1,nums);
+        subset_gen(result,sub2,nums);
+    }
+    
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int> >result;
+        vector<int>subset;
+        subset_gen(result,subset,nums);
+        return result;
+    }
+};
