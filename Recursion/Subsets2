@@ -1,0 +1,32 @@
+//https://leetcode.com/problems/subsets-ii/
+// Modified the subsets problem solution by first sorting the array so that the duplicates come along,then use map to avoid te continous subsets formed by duplicates.
+
+class Solution {
+public:
+    map<vector<int>,int>maps;
+    void subset_gen(vector<vector<int> >&result,vector<int>&subset,vector<int>nums){
+        
+        if(nums.size()==0){
+            if(maps.find(subset)==maps.end()){
+            result.push_back(subset);
+            maps[subset]+=1;
+            }
+            return;
+        }
+        vector<int>sub1(subset);
+        vector<int>sub2(subset);
+        sub2.push_back(nums[0]);
+        nums.erase(nums.begin());
+        subset_gen(result,sub1,nums);
+        subset_gen(result,sub2,nums);
+    }
+    
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int> >result;
+        vector<int>subset;
+        sort(nums.begin(),nums.end());
+        subset_gen(result,subset,nums);
+        map<vector<int>,int>::iterator it;
+        return result;
+    }
+};
