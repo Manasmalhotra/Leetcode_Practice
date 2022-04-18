@@ -1,0 +1,51 @@
+class Solution {
+public:
+    bool dfs(vector<vector<char>>& board,vector<vector<int>>&vis,string word,int index, int i,int j){
+        vis[i][j]=1;
+        int n=board.size();
+        int m=board[0].size();
+        
+        if(index==word.length()-1 && word[index]==board[i][j]){
+            return true;
+        }
+        bool a=false,b=false,c=false,d=false;
+        if(word[index]==board[i][j]){
+            if(i-1>=0 && vis[i-1][j]==0){
+                a=dfs(board,vis,word,index+1,i-1,j);
+            }
+            if(i+1<n && vis[i+1][j]==0){
+                b=dfs(board,vis,word,index+1,i+1,j);
+            }
+            if(j-1>=0 && vis[i][j-1]==0){
+                c=dfs(board,vis,word,index+1,i,j-1);
+            }
+            if(j+1<m && vis[i][j+1]==0){
+                d=dfs(board,vis,word,index+1,i,j+1);
+            }
+        }
+        
+        vis[i][j]=0;
+        if(a || b || c || d){
+            return true;
+        }
+        return false;
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+      int n=board.size(),m=board[0].size(),i,j,t=word.length();
+      vector<vector<int>> vis( n , vector<int> (m, 0));
+       bool res;
+      for(i=0;i<n;i++){
+          for(j=0;j<m;j++){
+              if(vis[i][j]==0){
+                  res=dfs(board,vis,word,0,i,j);
+                  if(res==true){
+                      return res;
+                  }
+              }
+          }
+      }
+        return false;
+        
+    }
+};
