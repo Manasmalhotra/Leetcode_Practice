@@ -1,0 +1,51 @@
+/* To avoid repeated usage of numbers we use a hash_map and use a number only till we have its valid count in the map. Also i=it ensures that we don not start
+from beginning always this ensures no duplicate sets are formed.*/
+
+//https://leetcode.com/problems/combination-sum-ii/
+
+class Solution {
+public:
+    map<int,int>maps;
+    
+    void getsum(vector<vector<int>>&res,vector<int>ans,int target,int minn,map<int,int>::iterator it){
+        
+        if(target==0){
+            res.push_back(ans);
+            return;
+        }
+        if(target<minn){
+            return;
+        }
+        
+        map<int,int>::iterator i;
+        //std::advance(it, 2);
+        for(i=it;i!=maps.end();i++){
+        int num=i->first;
+        int count=i->second;
+        if(count==0){
+            continue;
+        }
+        if(num<=target){
+          ans.push_back(num);
+          maps[num]=count-1;
+          getsum(res,ans,target-num,minn,i);
+          ans.pop_back();
+          maps[num]=count;
+        }
+    }
+    }
+    
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<int>ans;
+        vector<vector<int> >res;
+        sort(candidates.begin(),candidates.end());
+        for(int i=0;i<candidates.size();i++){
+            maps[candidates[i]]+=1;
+        }
+        map<int,int>::iterator it;
+        it=maps.begin();
+        getsum(res,ans,target,it->first,maps.begin());
+        return res;
+    }
+
+};
