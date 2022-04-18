@@ -1,0 +1,43 @@
+class Solution {
+public:
+	//Global variables to store recursion states
+    vector<vector<int>> all;
+    unordered_map<int,int> nots;
+    vector<int> ans;
+    int sum = 0, n;
+	
+	//Main Function
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+	
+		//Sorting the array O(nlog(n)) n<=100
+        sort(candidates.begin(), candidates.end());
+        n = candidates.size();
+		//This recursive function pushes all the answers into the vector "all"
+        recur(candidates,target,0);
+        return all;
+    }
+    
+    void recur(vector<int>& candidates, int target, int i){
+		//Base case to push answer to main array "all"
+        if(sum==target){ all.push_back(ans); return; }
+		//Base case to quit in case we don't find a combination
+        if(i>=n || (sum+candidates[i])>target) return;
+		
+		//If we haven't selected an element that is equal to current element, we move on to next one
+        if(nots[candidates[i]]){
+            recur(candidates, target, i+1);
+        }else{
+			//Decision 1: Pick current element "candidates[i]"
+            ans.push_back(candidates[i]);
+            sum+= candidates[i];
+            recur(candidates, target, i+1);
+			
+			//Decision 2: Not Pick current element "candidates[i]"
+            sum-= candidates[i];
+            ans.pop_back();
+            nots[candidates[i]]++;
+            recur(candidates, target, i+1);
+            nots[candidates[i]]--;
+        }
+    }
+};
