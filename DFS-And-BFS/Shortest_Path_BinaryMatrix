@@ -1,0 +1,53 @@
+//https://leetcode.com/problems/shortest-path-in-binary-matrix/
+
+class Solution {
+public:
+    struct Node{
+        int row;
+        int col;
+        int d;
+        Node(int row,int col,int d){
+            this->row=row;
+            this->col=col;
+            this->d=d;
+        }
+    };
+    
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+
+        int n=grid.size();
+        if(grid[0][0]!=0 || grid[n-1][n-1]!=0){
+            return -1;
+        }
+        vector<int> dx = {-1, 0, 1, 1, 1, 0, -1, -1};
+        vector<int> dy = {-1, -1, -1, 0, 1, 1, 1, 0};
+        vector<vector<int>> vis( n , vector<int> (n, 0));
+        
+        queue<Node>q;
+        q.push(Node(0,0,0));
+        vis[0][0]=1;
+        int w,len=0;
+        
+        while(!q.empty()){
+            w=q.size();
+            while(w--){
+            Node temp=q.front();
+            q.pop();
+            if(temp.row==n-1 && temp.col==n-1){
+                return temp.d+1;
+            }
+            for(int k=0;k<8;k++){
+                int x=temp.row+dx[k];
+                int y=temp.col+dy[k];
+                if(x>=0 && x<n && y>=0 && y<n && grid[x][y]==0 && vis[x][y]==0){
+                    vis[x][y]=1;
+                    q.push(Node(x,y,temp.d+1));
+                }
+            }
+        }
+            w++;
+            
+        }
+        return -1;
+    }
+};
