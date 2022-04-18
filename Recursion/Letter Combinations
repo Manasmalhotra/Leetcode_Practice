@@ -1,0 +1,37 @@
+//https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+/* We have to generate combinationswith number keys so initialise with the strings of first element then take pairwise combination with the second.Then update the result
+do the same procedure if more than 2 numbers are present.*/
+/* It is similar to generating combinations of a truth table. 00 01 10 11. 000 001 010 011 100 101 110 111. 0001 0000 0010 0011 0100 0101..
+class Solution {
+public:
+    vector<string> permute(vector<string>str1,vector<string>str2){
+        vector<string> ans;
+        for(int i=0;i<str1.size();i++){
+            for(int j=0;j<str2.size();j++){
+                ans.push_back(str1[i]+str2[j]);
+            }
+        }
+        return ans;
+    }
+    
+    vector<string> letterCombinations(string digits) {
+     int n=digits.length(),i;
+     map<char,vector<string>>maps;
+     maps['2']={"a","b","c"};
+     maps['3']={"d","e","f"};
+     maps['4']={"g","h","i"};
+     maps['5']={"j","k","l"};
+     maps['6']={"m","n","o"};
+     maps['7']={"p","q","r","s"};
+     maps['8']={"t","u","v"};
+     maps['9']={"w","x","y","z"};
+    
+    vector<string>res=maps[digits[0]];
+    for(i=1;i<n;i++){
+        res=permute(res,maps[digits[i]]);
+    }
+    
+    return res;
+}
+};
