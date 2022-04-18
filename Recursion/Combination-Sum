@@ -1,0 +1,36 @@
+//https://leetcode.com/problems/combination-sum/
+/*Approach is to stick on a element till we can, after return it should be popped from ans as now we are moving to next index without including it.
+Ex- [2,3,6,7] target=7. First 2 2 2 generated after this target left=1 therefore the index runs to andidate.size()-1 without any other element being included..
+So now, the control returns to 2 2 2 function and the last 2 is popped(ans.pop_back()). And now array is 2 2 after this getsum called for index+1. 2 2 3 now we dont have
+a number less than 0 thus the control runs to candidate.size() again and this time target==0. Thus 2 2 3 is included in res.Then control comes back and 3 is popped 
+from 2 2 3, now 2 2 6 is checked then 2 2 6 7 checked then 2 2 7 then 2 3 and so on.*/
+
+class Solution {
+public:
+    void getsum(vector<vector<int>>&res,vector<int>ans,int index,vector<int>candidates,int target){
+        
+        if(index==candidates.size()){
+            if(target==0){
+                res.push_back(ans);
+                return;
+            }
+            else{
+                return;
+            }
+    
+        }
+        if(candidates[index]<=target){
+        ans.push_back(candidates[index]);
+        getsum(res,ans,index,candidates,target-candidates[index]);
+        ans.pop_back();
+        }
+        getsum(res,ans,index+1,candidates,target);
+    }
+    
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int>ans;
+        vector<vector<int> >res;
+        getsum(res,ans,0,candidates,target);
+        return res;
+    }
+};
