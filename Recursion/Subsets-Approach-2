@@ -1,0 +1,25 @@
+
+//https://leetcode.com/problems/subsets/
+
+class Solution {
+public:
+    void gen(vector<vector<int> >&result,vector<int>sub,vector<int>nums,int index){
+        
+        if(index==nums.size()){
+            result.push_back(sub);
+            return;
+        }
+        vector<int>op=sub;
+        gen(result,op,nums,index+1);
+        op.push_back(nums[index]);
+        gen(result,op,nums,index+1);
+    }
+    
+    vector<vector<int>> subsets(vector<int>& nums) {
+       vector<vector<int> >result;
+        vector<int>sub;
+        int index=0;
+        gen(result,sub,nums,index);
+        return result;
+    }
+};
