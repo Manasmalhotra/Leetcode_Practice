@@ -1,0 +1,107 @@
+/*
+
+Given an n x n grid containing only values 0 and 1, where 0 represents water and 1 represents land, find a water cell such that its distance to 
+the nearest land cell is maximized, and return the distance. If no land or water exists in the grid, return -1.
+
+The distance used in this problem is the Manhattan distance: the distance between two cells (x0, y0) and (x1, y1) is |x0 - x1| + |y0 - y1|.
+
+*/
+
+/* Approach 1: For each zero find a cell with value=1 and store the distance covered in the process then take its maximum.
+               But in this case it would take O(n^2) time to first traverse the matrix and then O(n) for bfs so complexity will become O(n^3).
+               Also if you store the coordinates and then did bfs it did not work
+               
+void bfs(vector<vector<int> >&grid,int i,int j){
+    int dx[]={-1,0,1,0};
+    int dy[]={0,-1,0,1};
+    int n=grid.size(),m=grid[0].size();
+    if(grid[i][j]==0){
+              vector<vector<int> >vis(n,vector<int>(m,0));
+              queue<pair<int,pair<int,int> > >q;
+              q.push(make_pair(i,make_pair(j,0)));
+              while(!q.empty()){
+                  pair<int,pair<int,int> >temp=q.front();
+                  q.pop();
+                  int row=temp.first;
+                  int col=temp.second.first;
+                  int dist=temp.second.second;
+                  vis[row][col]=1;
+                  
+                  if(grid[row][col]==1){
+                      if(maxx<dist){
+                          maxx=dist;
+                      }
+                      break;
+                  }
+                  for(int k=0;k<4;k++){
+                      int newrow=row+dx[k];
+                      int newcol=col+dy[k];
+                      if(newrow>=0 && newcol>=0 && newrow<n && newcol<m && vis[newrow][newcol]==0){
+                          q.push(make_pair(newrow,make_pair(newcol,dist+1)));
+                      }
+                  }
+}
+    }
+}
+int maxDistance(vector<vector<int>>& grid) {
+    int i,j,n=grid.size(),m=grid[0].size();
+    vector<pair<int,int> >result;
+    
+    for(i=0;i<n;i++){
+        for(j=0;j<m;j++){
+            if(grid[i][j]==0){
+                result.push_back(make_pair(i,j));
+            }
+        }
+    }
+    
+    for(i=0;i<result.size();i++){
+        bfs(grid,result[i].first,result[i].second);
+    }
+    
+    if(maxx==INT_MIN){return -1;}
+    return maxx;
+}
+*/
+
+Approach 2: We needed to get the water cell such that its distance from a land cell is minimised.
+            Instead we can do this as traverse from all the land cells at once and distance to farthest water cell is minimised.
+            
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& grid) {
+        int i,j,n=grid.size(),m=grid[0].size();
+vector<vector<int> >vis(n,vector<int>(m,0));
+
+queue<pair<int,int> >q;
+for(i=0;i<n;i++){
+ for(j=0;j<m;j++){
+  if(grid[i][j]==1){
+    q.push({i,j});
+}
+}
+}
+if(q.size()==0 || q.size()==n*m){
+    return -1;
+}
+int dist=0;
+vector<vector<int> >res={{-1,0},{0,-1},{1,0},{0,1}};
+while(!q.empty()){
+ int s=q.size();
+ dist+=1;
+ while(s--){
+   pair<int,int>temp=q.front();
+   q.pop();
+   for(int i=0;i<4;i++){
+      int row=temp.first+res[i][0];
+      int col=temp.second+res[i][1];
+      if(row>=0 && col>=0 && row<n && col<m && vis[row][col]==0){
+       q.push({row,col});
+       vis[row][col]=1;
+      }
+   }
+  }
+ }
+ return dist-1;
+ }
+};
