@@ -1,0 +1,38 @@
+/*
+An image is represented by an m x n integer grid image where image[i][j] represents the pixel value of the image.
+
+You are also given three integers sr, sc, and newColor. You should perform a flood fill on the image starting from the pixel image[sr][sc].
+
+To perform a flood fill, consider the starting pixel, plus any pixels connected 4-directionally to the starting pixel of the same color as the starting pixel, plus any pixels connected 4-directionally to those pixels (also with the same color), and so on. Replace the color of all of the aforementioned pixels with newColor.
+
+Return the modified image after performing the flood fill.
+*/
+
+void dfs(vector<vector<int>>&grid,vector<vector<int> >&vis,int i,int j,int newcolor,int color){
+    
+    if(i<0 || j<0 || i>=grid.size() || j>=grid[0].size() || vis[i][j] || grid[i][j]!=color){
+      return;
+    }
+    
+     vis[i][j]=1;
+     grid[i][j]=newcolor;
+     dfs(grid,vis,i-1,j,newcolor,color);
+     dfs(grid,vis,i,j-1,newcolor,color);
+     dfs(grid,vis,i+1,j,newcolor,color);
+     dfs(grid,vis,i,j+1,newcolor,color);
+}
+
+vector<vector<int> >floodfill(vector<vector<int> >&grid,int sr,int sc,int newcol){
+
+  int n=grid.size(),m=grid[0].size(),i,j;
+  vector<vector<int> >vis(n,vector(m,0));
+ 
+  if(grid[sr][sc]==newcol){
+   return grid;
+  }
+  
+  dfs(grid,vis,sr,sc,newcol,grid[sr][sc]);
+  return grid;
+
+}
+ 
