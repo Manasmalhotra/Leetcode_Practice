@@ -1,0 +1,26 @@
+class Solution {
+    public boolean checkPossibility(int[] nums) {
+      int i,j,maxx=1,n=nums.length;
+      int[] lis=new int[n];
+      
+      for(i=0;i<n;i++){
+          lis[i]=1;
+      }
+        
+      for(i=1;i<n;i++){
+          for(j=0;j<i;j++){
+              if(nums[j]<=nums[i] && lis[i]<lis[j]+1){
+                  lis[i]=lis[j]+1;
+                  maxx=Math.max(maxx,lis[i]);
+              }
+          }
+      }
+        if(maxx>=n-1){
+            return true;
+        }
+        System.out.println("MAXX "+Integer.toString(maxx));
+        return false;
+    }
+}
+
+// Used the longest increasing subsequence solution here.
