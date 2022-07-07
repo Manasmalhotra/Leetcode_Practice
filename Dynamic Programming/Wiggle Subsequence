@@ -1,0 +1,66 @@
+A wiggle sequence is a sequence where the differences between successive numbers strictly alternate between positive and negative. The first difference (if one exists) may be either positive or negative. A sequence with one element and a sequence with two non-equal elements are trivially wiggle sequences.
+
+For example, [1, 7, 4, 9, 2, 5] is a wiggle sequence because the differences (6, -3, 5, -7, 3) alternate between positive and negative.
+In contrast, [1, 4, 7, 2, 5] and [1, 7, 4, 5, 5] are not wiggle sequences. The first is not because its first two differences are positive, and the second is not because its last difference is zero.
+A subsequence is obtained by deleting some elements (possibly zero) from the original sequence, leaving the remaining elements in their original order.
+
+Given an integer array nums, return the length of the longest wiggle subsequence of nums.
+
+A wiggle sequence is a sequence where the differences between successive numbers strictly alternate between positive and negative. The first difference (if one exists) may be either positive or negative. A sequence with one element and a sequence with two non-equal elements are trivially wiggle sequences.
+
+
+class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        int n=nums.length,i,j;
+        int [] up=new int[n];
+        int[] down=new int[n];
+        
+        
+        for(i=1;i<n;i++){
+            for(j=0;j<i;j++){
+                if(nums[i]<nums[j]){
+                    down[i]=Math.max(down[i],up[j]+1);
+                }
+                else if(nums[i]>nums[j]){
+                    up[i]=Math.max(up[i],down[j]+1);
+                }
+            }
+        }
+        return 1+ Math.max(up[n-1],down[n-1]); // As we have not initialised the array with 1 for counting the current element. 0 se counting shuru nhi hoti XD.
+    }
+}
+
+//Using the concept similar to longest increasing subsequence..Since it is alternating sequence of increasing and decresing we have maintained two arrays up and down 
+for up we get the value by looking at the maximum down before it. Similarly when we require to update down[i] we look for the maximum up sequence before it..
+
+
+
+APPROACH 2 (LINEAR TIME)
+
+class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        int n=nums.length,i,j;
+        int [] up=new int[n];
+        int[] down=new int[n];
+        up[0]=down[0]=1;
+        for(i=1;i<n;i++){
+            if(nums[i]>nums[i-1]){
+                up[i]=Math.max(up[i],down[i-1]+1);
+                down[i]=down[i-1];
+            }
+            else if(nums[i]<nums[i-1]){
+                down[i]=Math.max(down[i],up[i-1]+1);
+                up[i]=up[i-1];
+            }
+            else{
+                down[i]=down[i-1];
+                up[i]=up[i-1];
+            }
+        }
+        return Math.max(up[n-1],down[n-1]);
+    }
+}
+
+The current element will either be a part of up wiggle or a down wiggle or no wiggle at all, therefore we update accordingly for each i.
+Space can further be optimized by using only up and down variables instead of arrays beacuse at any time we need only the i-1th element.
+
