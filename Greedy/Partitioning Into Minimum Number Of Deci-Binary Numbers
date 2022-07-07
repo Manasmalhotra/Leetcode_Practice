@@ -1,0 +1,34 @@
+A decimal number is called deci-binary if each of its digits is either 0 or 1 without any leading zeros. For example, 101 and 1100 are deci-binary, while 112 and 3001 are not.
+
+Given a string n that represents a positive decimal integer, return the minimum number of positive deci-binary numbers needed so that they sum up to n.
+
+ // Here first understand the question, it is saying you can olny use the elements like 000000,111111,001111,10000,11111 ie numbers made up of only 1 and 0. So what
+ //will be the minimum numbers required to do that.
+ n=32 ===> 3=1  + 1 + 1 Now can we adjust for 2==> Yes, 11+11+10=32.
+ n=84567 ==>8= 1+1+1+1+1+1+1+1 Can we adjust 7==> 11 +11 +11+11+11+11+11+10===> can we adjust 5==> 111+111+111+111+111+110+110+110===>Adjust 6==>1111+1111+1111+1111+1111+1111+1110+1110
+ Adjust 7 again==>11111+11111+11111+11111+11111+11111+11101+11100
+ 
+ Therefore we can see that all numbers can be adjusted till the maximum of the digits is accomodated. Thus our answer to the min numbers required== Max digit.
+
+Example 1:
+
+Input: n = "32"
+Output: 3
+Explanation: 10 + 11 + 11 = 32
+Example 2:
+
+Input: n = "82734"
+Output: 8
+
+
+class Solution {
+public:
+    int minPartitions(string n) {
+      int i,ele,maxx=0,len=n.length();
+      for(i=0;i<len;i++){
+          ele=n[i]-'0';
+          maxx=max(maxx,ele);
+      }
+        return maxx;
+    }
+};
