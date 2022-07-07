@@ -1,0 +1,31 @@
+Given a string word, return the sum of the number of vowels ('a', 'e', 'i', 'o', and 'u') in every substring of word.
+
+A substring is a contiguous (non-empty) sequence of characters within a string.
+
+Note: Due to the large constraints, the answer may not fit in a signed 32-bit integer. Please be careful during the calculations.
+
+Explanation Link : https://leetcode.com/problems/vowels-of-all-substrings/discuss/1564075/Detailed-explanation-of-why-(len-pos)-*-(pos-%2B-1)-works
+
+// Logic here is to see where the vowels can contribute and how much. when a vowel is at pos it can be part of substrings starting at 0,1,2,3,till pos.. From end it can be
+// part of substrings from pos to n-1 Therefore n-1-pos+1=n-pos options.
+
+
+class Solution {
+public:
+    bool isVowel(char ch) {
+        return ch == 'a' or ch == 'e' or ch == 'i' or ch == 'o' or ch == 'u';
+    }
+    
+    long long countVowels(string word) {
+        long long count = 0;
+        int len = word.size();
+        
+        for(int pos = 0; pos < len; pos++) {
+            if(isVowel(word[pos])) {
+                count += (long)(len - pos) * (long)(pos + 1);
+            }
+        }
+        
+        return count;
+    }
+};
