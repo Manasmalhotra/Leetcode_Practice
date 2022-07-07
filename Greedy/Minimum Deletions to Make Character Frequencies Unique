@@ -1,0 +1,62 @@
+Minimum Deletions to Make Character Frequencies Unique
+
+A string s is called good if there are no two different characters in s that have the same frequency.
+
+Given a string s, return the minimum number of characters you need to delete to make s good.
+
+The frequency of a character in a string is the number of times it appears in the string. 
+For example, in the string "aab", the frequency of 'a' is 2, while the frequency of 'b' is 1.
+
+It is a Grredy problem beacuse there are no sub problems or optimizations here to apply dp.. Our work is to see if the frequency has occured or not. 
+If it has occurred then decrease it till it become 0 or unique.
+
+//Java Solution
+
+class Solution {
+    public int minDeletions(String s) {
+        int deleteCount=0,i,n=s.length();
+        Set<Integer> seen=new HashSet<>();
+        int []freq=new int[26];
+        
+        for(i=0;i<n;i++){
+            freq[s.charAt(i)-'a']+=1;
+        }
+        for(i=0;i<26;i++){
+            while(freq[i]>0 && seen.contains(freq[i])){
+                freq[i]-=1;
+                deleteCount++;
+            }
+            seen.add(freq[i]);
+        }
+        return deleteCount;
+    }
+}
+
+
+//C++ Solution
+
+class Solution {
+public:
+   int minDeletions(string s) {
+
+        vector<int> frequency(26, 0);
+        for (char c : s) {
+            frequency[c - 'a']++;
+        }
+        
+        int deleteCount = 0;
+ 
+        unordered_set<int> seenFrequencies;
+        for (int i = 0; i < 26; i++) {
+            while (frequency[i] && seenFrequencies.find(frequency[i]) != seenFrequencies.end()) {
+                frequency[i]--;
+                deleteCount++;
+            }
+
+            seenFrequencies.insert(frequency[i]);
+        }
+        
+        return deleteCount;
+    }
+};
+
