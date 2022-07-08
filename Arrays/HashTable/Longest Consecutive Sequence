@@ -1,0 +1,48 @@
+Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
+
+You must write an algorithm that runs in O(n) time.
+
+// The problem statement does not mention it but here consecutive elements does not allow any duplicates to be added in count.
+
+TESTCASES:
+
+[100,4,200,1,3,2] Ans=4
+[0,3,7,2,5,8,4,6,0,1] Ans=9
+[] Ans=0
+[0,0] Ans=1
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+       int i,n=nums.size();
+     
+       map<int,int>maps;
+       for(i=0;i<n;i++){
+           maps[nums[i]]+=1;
+       }
+        map<int,int>::iterator it;
+         map<int,int>::iterator k;
+        if(maps.size()==1 || maps.size()==0){
+            return maps.size();
+        }
+        k=maps.begin();
+        int maxx=0,val=k->first;
+        int count=1;
+        k++;
+        for(it=k;it!=maps.end();it++){
+             if(val+1==it->first){
+                 val=it->first;
+                 count+=1;
+             } 
+             else{
+                 val=it->first;
+                 count=1;
+             }
+             if(maxx<count){
+                 maxx=count;
+             }
+
+        }
+        return maxx;
+    }
+};
