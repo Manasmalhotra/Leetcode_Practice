@@ -1,0 +1,55 @@
+Given the heads of two singly linked-lists headA and headB, return the node at which the two lists intersect. If the two linked lists have no intersection at all, return null.
+
+For example, the following two linked lists begin to intersect at node with value 6:
+
+3--1----2
+        |
+4---5---6--3---8   
+
+// Traverse extra part of one of the lists( if any) then when their lengths become equal, traverse together till both of their pointers become equal , i.e you find intersection
+//Or the lists trminate indicating that no intersection exists.
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+       ListNode*temp=headA,*t=headB;
+        int len1=0,len2=0;
+        
+        while(temp!=NULL){
+            len1+=1;
+            temp=temp->next;
+        }
+        while(t!=NULL){
+            len2+=1;
+            t=t->next;
+        }
+        temp=headA;
+        t=headB;
+        while(len1>len2){
+            temp=temp->next;
+            len1--;
+        }
+        while(len2>len1){
+            t=t->next;
+            len2--;
+        }
+        while(temp && t){
+            if(temp==t){
+                return t;
+            }
+            temp=temp->next;
+            t=t->next;
+        }
+        return NULL;
+    } 
+};
+
