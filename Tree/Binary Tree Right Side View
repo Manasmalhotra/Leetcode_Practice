@@ -32,3 +32,6 @@ public:
         return result;
     }
 };
+
+TC: O(Number of Nodes*Number of levels)=O(4*N)==O(N)
+SC: O(N)
