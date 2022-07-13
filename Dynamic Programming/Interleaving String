@@ -1,0 +1,74 @@
+HARD Question
+
+Given strings s1, s2, and s3, find whether s3 is formed by an interleaving of s1 and s2.
+
+An interleaving of two strings s and t is a configuration where s and t are divided into n and m non-empty substrings respectively, such that:
+
+s = s1 + s2 + ... + sn
+t = t1 + t2 + ... + tm
+|n - m| <= 1
+The interleaving is s1 + t1 + s2 + t2 + s3 + t3 + ... or t1 + s1 + t2 + s2 + t3 + s3 + ...
+Note: a + b is the concatenation of strings a and b.
+
+ https://leetcode.com/problems/interleaving-string/
+ 
+ Recursion
+ //Considering 2 possibilities for each character.
+ TC: O(2^(m+n))
+ 
+ class Solution {
+public:
+    bool generate(string s1,string s2,string s3,string res,int i,int j,int k){
+        if(i==s1.length() && j==s2.length() && res.compare(s3)==0){
+            return true;
+        }
+        
+        bool ans=false;
+        
+        if(i<s1.length()){
+            ans|=generate(s1,s2,s3,res+s1[i],i+1,j,k+1);
+        }
+        if(j<s2.length()){
+            ans|=generate(s1,s2,s3,res+s2[j],i,j+1,k+1);
+        }
+        return ans;
+    }
+    
+    bool isInterleave(string s1, string s2, string s3) {
+        int n=s1.length(),m=s2.length(),k=s3.length();
+        int i=0,j=0,y=0;
+        if(n+m!=k){
+            return false;
+        }
+        else{
+            string res="";
+            return generate(s1,s2,s3,res,i,j,y);
+        }
+    }
+};
+
+
+Bottom Up
+
+public class Solution {
+    public boolean isInterleave(String s1, String s2, String s3) {
+        if (s3.length() != s1.length() + s2.length()) {
+            return false;
+        }
+        boolean dp[][] = new boolean[s1.length() + 1][s2.length() + 1];
+        for (int i = 0; i <= s1.length(); i++) {
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0 && j == 0) {
+                    dp[i][j] = true; // Empty string always true
+                } else if (i == 0) {
+                    dp[i][j] = dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1); // first string empty comparing all chars of second string. dp[i][j-1] is checked because if previous only is false then how can it be true for upcoming characters.
+                } else if (j == 0) {
+                    dp[i][j] = dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1); // second string emoty check only for first.
+                } else {
+                    dp[i][j] = (dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1)) || (dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1)); // if s1 character is equal to s3 character check if the string s1 before including the current element and the same s2 form an interleaving string or not.
+                }                                                                                                                                        // Same for s2 if s2[i]==s3[k] then check if s2 before including the current character and the same s1 were forming interleaving string or not.
+            }
+        }
+        return dp[s1.length()][s2.length()];
+    }
+}
