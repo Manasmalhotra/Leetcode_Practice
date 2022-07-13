@@ -1,0 +1,32 @@
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>>res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        
+        Deque<TreeNode>q=new ArrayDeque<TreeNode>();
+        q.add(root);
+        int n;
+        TreeNode temp;
+        
+        while(!q.isEmpty()){
+            n=q.size();
+            List<Integer>ans=new ArrayList<>();
+            while(n>0){
+            
+                temp=q.poll();
+                ans.add(temp.val);
+                if(temp.left!=null){
+                  q.add(temp.left);
+                }
+                if(temp.right!=null){
+                  q.add(temp.right);
+               }
+               n-=1;
+           }
+            res.add(ans);
+        }
+        return res;
+    }
+}
