@@ -1,6 +1,6 @@
-Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
+Given two integer arrays postorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
 
-// We get root latys at the end of the postorder traversal. After geetting this if we find the position of that last element in inorder traversal we can get the split of left
+// We get root lies at the end of the postorder traversal. After getting this if we find the position of that last element in inorder traversal we can get the split of left
    and right sub trees . Again the second last element will give us the root of right subtree becuse POSTORDER follows LEFT RIGHT ROOT. So, we gon arranging the right subtree first and then the left.
 
 class Solution {
