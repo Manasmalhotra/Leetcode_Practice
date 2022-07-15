@@ -1,0 +1,25 @@
+Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
+
+// We get root latys at the end of the postorder traversal. After geetting this if we find the position of that last element in inorder traversal we can get the split of left
+   and right sub trees . Again the second last element will give us the root of right subtree becuse POSTORDER follows LEFT RIGHT ROOT. So, we gon arranging the right subtree first and then the left.
+
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& in, vector<int>& post) {
+        int n=in.size();
+        int postidx=n-1;
+        return build(in,post,0,n-1,postidx);
+    }
+    
+ TreeNode* build(vector<int>& in, vector<int>& post, int inStart, int inEnd, int& postIdx) {
+        if(inStart > inEnd) return NULL;
+        TreeNode* root = new TreeNode(post[postIdx--]);
+        int inIdx = find(in.begin(),in.end(), root -> val) - in.begin();
+        root -> right = build(in, post, inIdx+1, inEnd, postIdx);
+        root -> left  = build(in, post, inStart, inIdx-1, postIdx);
+        return root;
+    }
+    
+};
+
+TC: O(N) SC:O(N) for recursion.
