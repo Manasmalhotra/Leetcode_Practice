@@ -1,0 +1,25 @@
+https://leetcode.com/problems/russian-doll-envelopes/
+
+class Solution {
+public:
+    static bool cmp_first(const vector<int>& i, const vector<int>& j) {
+        if (i[0] == j[0])
+            return i[1] > j[1];
+        return i[0] < j[0];
+    }
+    int maxEnvelopes(vector<vector<int> >& envelopes) {
+        
+        int i,j,n=envelopes.size(),maxx=1;
+        sort(envelopes.begin(), envelopes.end(), cmp_first);
+        vector<int> dp(n,1);
+        for(i=1;i<n;i++){
+            for(j=0;j<i;j++){
+                if(envelopes[i][0]>envelopes[j][0] && envelopes[i][1]>envelopes[j][1] && dp[i]<dp[j]+1){
+                    dp[i]=dp[j]+1;
+                    maxx=max(maxx,dp[i]);
+                }
+            }
+        }
+        return maxx;
+  }
+};
