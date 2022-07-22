@@ -1,0 +1,51 @@
+Given a string array words, return the maximum value of length(word[i]) * length(word[j]) where the two words do not share common letters. If no such two words exist, return 0.
+
+ 
+
+Example 1:
+
+Input: words = ["abcw","baz","foo","bar","xtfn","abcdef"]
+Output: 16
+Explanation: The two words can be "abcw", "xtfn".
+
+Example 2:
+
+Input: words = ["a","ab","abc","d","cd","bcd","abcd"]
+Output: 4
+Explanation: The two words can be "ab", "cd".
+
+Appoach: We need to make comparision between strings in O(1) so created a bitmask as we don't have to have an exact match,but have to just see if a particular character occurs and 1<<index will create unique number for each of the 26 alphabets.
+TC: O(N^2)
+SC:O(N)
+
+class Solution {
+public:
+    int generate(string word){
+        int i,state=0;
+        for(i=0;i<word.length();i++){
+            int index=word[i]-'a';
+            state|= 1<<(index);
+        }
+        return state;
+    }
+    
+    int maxProduct(vector<string>& words) {
+        int i,j,maxx=0,len=words.size();
+        vector<int>state(len,0);
+        
+        for(i=0;i<len;i++){
+            state[i]=generate(words[i]);  
+        }
+        
+        for(i=0;i<len-1;i++){
+            for(j=i+1;j<len;j++){
+                if((state[i] & state[j])==0){
+                 int k=words[i].length();
+                 int y=words[j].length();              maxx=max(maxx,k*y);
+                }
+            }
+        }
+        
+        return maxx;
+    }
+};
