@@ -1,0 +1,34 @@
+Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise.
+
+A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node's descendants. The tree tree could also be considered as a subtree of itself.
+
+// Check if subroot->value==root->value if yes compare the whole of the trees in equals method. If the isEqual is false then search in te right and left subtrees of the main tree.
+//Can also be done in O(M+N) using KMP ALGO.//Pending.
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        if(root==NULL && subRoot==NULL){
+            return true;
+        }
+        if(root==NULL|| subRoot==NULL){
+            return false;
+        }
+        if(isEqual(root,subRoot)){
+            return true;
+        }
+        return isSubtree(root->right,subRoot)||isSubtree(root->left,subRoot);
+    }
+    
+    bool isEqual(TreeNode*root,TreeNode*subRoot){
+        if(root==NULL && subRoot==NULL){
+            return true;
+        }
+        if(root==NULL|| subRoot==NULL){
+            return false;
+        }
+        if(root->val!=subRoot->val){
+            return false;
+        }
+        return isEqual(root->right,subRoot->right) && isEqual(root->left,subRoot->left);
+    }
+};
