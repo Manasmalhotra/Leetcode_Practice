@@ -1,0 +1,59 @@
+Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+
+
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+       int i,j,n=nums.size(),maxx=1;
+       vector<int>lis(n,1);
+       for(i=1;i<n;i++){
+           for(j=0;j<i;j++){
+               if(nums[j]<nums[i] && lis[i]<lis[j]+1){
+                   lis[i]=lis[j]+1;
+                   if(maxx<lis[i]){
+                       maxx=lis[i];
+                   }
+               }
+           }
+       }
+        return maxx;
+    }
+};
+
+TC: O(N^2) SC: O(1)
+
+//This Approach is explained in the scaler regiseter..And striver video.
+
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int i,n=nums.size();
+        vector<int>temp;
+        temp.push_back(nums[0]);
+        int len=1;
+        
+       for(i=1;i<n;i++){
+           if(nums[i]>temp.back()){
+               temp.push_back(nums[i]);
+               len++;
+           }
+           else{
+               int ind=lower_bound(temp.begin(),temp.end(),nums[i])-temp.begin();
+              temp[ind]=nums[i]; 
+           }
+       }
+        return len;
+    }
+};
+
+TC: O(NlogN) SC:O(N)
