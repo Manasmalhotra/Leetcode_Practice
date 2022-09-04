@@ -1,0 +1,41 @@
+Number of Ways to Reach a Position After Exactly k Steps
+
+You are given two positive integers startPos and endPos. Initially, you are standing at position startPos on an infinite number line. With one step, you can move either one position to the left, or one position to the right.
+
+Given a positive integer k, return the number of different ways to reach the position endPos starting from startPos, such that you perform exactly k steps. Since the answer may be very large, return it modulo 109 + 7.
+
+Two ways are considered different if the order of the steps made is not exactly the same.
+
+Note that the number line includes negative integers.
+
+Approach: We adjust for negative numbers by taking +1000, by this the positive numbers will exceed till 2000 and would give space for negative integers as if we stand at 1 at go 1000 steps back it can give value till -1000 to adding 1000 will bring it to index 0.
+Now the dpvector size here is taken to be 3001 beacuse if are start position is 1000 then we will store it as 1000+1000=2000 now if suppose we hve k=1000 then we can go from start till 3000 index as (2000+1000) 
+
+
+class Solution {
+public:
+    int M=1e9+7;
+    int finds(int startPos,int endPos,int k, vector<vector<int> >&dp){
+        if(k==0){
+            if(startPos==endPos){
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        }
+        if(dp[startPos+1000][k]!=-1){
+            return dp[startPos+1000][k];
+        }
+        else{
+            int first=finds(startPos+1,endPos,k-1,dp)%M;
+ int second=finds(startPos-1,endPos,k-1,dp)%M;
+        dp[startPos+1000][k]=(first+second)%M;
+        return dp[startPos+1000][k];  
+        }
+    }
+    int numberOfWays(int startPos, int endPos, int k) {
+         vector<vector<int>> dp(3001, vector<int>(1001, -1));
+        return finds(startPos,endPos,k,dp);
+    }
+};
