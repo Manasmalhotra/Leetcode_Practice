@@ -1,0 +1,47 @@
+You are given a 2D integer array intervals where intervals[i] = [lefti, righti] represents the inclusive interval [lefti, righti].
+
+You have to divide the intervals into one or more groups such that each interval is in exactly one group, and no two intervals that are in the same group intersect each other.
+
+Return the minimum number of groups you need to make.
+
+Two intervals intersect if there is at least one common number between them. For example, the intervals [1, 5] and [5, 8] intersect.
+
+ 
+
+Example 1:
+
+Input: intervals = [[5,10],[6,8],[1,5],[2,3],[1,10]]
+Output: 3
+Explanation: We can divide the intervals into the following groups:
+- Group 1: [1, 5], [6, 8].
+- Group 2: [2, 3], [5, 10].
+- Group 3: [1, 10].
+It can be proven that it is not possible to divide the intervals into fewer than 3 groups.
+
+
+Approach: This question is similar to the minimum number of meeting rooms required to have meetings with intervl[0] as start time and interval[1] as end time.
+This v[1]+1 is to ensure that incase v[0]==v[1] so v[0] should come first.
+
+Example: arr[]=0900 0910 0930 1010  1130
+         dept[]=0910 0920 1010 1030 1200
+         
+Here you want [0900,arrival; 0910,arrival; 0910,dept;0920,dept;0930,arrival;1010,arrival;1010,dept;1030,dept;1130,arrival;1200,dept]
+This is because even if arrival of one train and departure of another is same we would require a different platform for the two trains/meetings.
+Also in this interval problem [1,5], [5,7] are taken to be intersecting beacuse they have 5 in common.
+That is why we will increase the departure by 1 so that 0910 becomes 0911 and comes after 0910,arrival though value of departure=-1.
+
+class Solution {
+public:
+    int minGroups(vector<vector<int>>& intervals) {
+        vector<vector<int>> A;
+        for (auto& v : intervals) {
+            A.push_back({v[0], 1});
+            A.push_back({v[1] + 1, -1});
+        }
+        int res = 0, cur = 0;
+        sort(A.begin(), A.end());
+        for (auto& v : A)
+            res = max(res, cur += v[1]);
+        return res;
+    }
+};
