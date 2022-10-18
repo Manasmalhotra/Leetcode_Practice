@@ -1,0 +1,82 @@
+You are given two positive integers startPos and endPos. Initially, you are standing at position startPos on an infinite number line. With one step, you can move either one position to the left, or one position to the right.
+
+Given a positive integer k, return the number of different ways to reach the position endPos starting from startPos, such that you perform exactly k steps. Since the answer may be very large, return it modulo 109 + 7.
+
+Two ways are considered different if the order of the steps made is not exactly the same.
+
+Note that the number line includes negative integers.
+
+Example 1:
+
+Input: startPos = 1, endPos = 2, k = 3
+Output: 3
+Explanation: We can reach position 2 from 1 in exactly 3 steps in three ways:
+- 1 -> 2 -> 3 -> 2.
+- 1 -> 2 -> 1 -> 2.
+- 1 -> 0 -> 1 -> 2.
+It can be proven that no other way is possible, so we return 3.
+
+Brute Force: Pure Recursion.
+
+Better Approach: Recursion+Memoization
+
+class Solution {
+public:
+    map<pair<int,int>,int>maps;
+    int numberOfWays(int startPos, int endPos, int k) {
+        int mod=1e9+7;
+        if(k<0){
+            return 0;
+        }
+        if(k==0){
+            return (startPos==endPos)?1:0;
+        }
+        int first=0,second=0;
+        if(maps.find({startPos-1,k-1})!=maps.end()){
+            first= maps[{startPos-1,k-1}];
+        }
+        else{
+            first=numberOfWays(startPos-1,endPos,k-1)%mod;
+            maps[{startPos-1,k-1}]=first;
+        }
+        if(maps.find({startPos+1,k-1})!=maps.end()){
+             second=maps[{startPos+1,k-1}];
+        }
+        else{
+            second=numberOfWays(startPos+1,endPos,k-1)%mod;
+            maps[{startPos+1,k-1}]=second;
+        }
+        return maps[{startPos,k}]+=(first%mod+second%mod)%mod;
+    }
+};
+
+Best Approach:Memoization with Arrays. The leetcode editor gave TLE with maps so this approach works here. Here dp[3001] as 1<=start<=1000 as 1<=k<=1000
+-1000<range<2000 if stand at i=1 and go 1000 steps in negative, similarly stand on 1000 nd go on 1000 steps forward;
+Now as we can go either left or right here add the ways going towards each side till you exhaust the steps
+class Solution {
+public:
+    int M=1e9+7;
+    int finds(int startPos,int endPos,int k, vector<vector<int> >&dp){
+        if(k==0){
+            if(startPos==endPos){
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        }
+        if(dp[startPos+1000][k]!=-1){
+            return dp[startPos+1000][k];
+        }
+        else{
+            int first=finds(startPos+1,endPos,k-1,dp)%M;
+ int second=finds(startPos-1,endPos,k-1,dp)%M;
+        dp[startPos+1000][k]=(first+second)%M;
+        return dp[startPos+1000][k];  
+        }
+    }
+    int numberOfWays(int startPos, int endPos, int k) {
+         vector<vector<int>> dp(3001, vector<int>(1001, -1));
+        return finds(startPos,endPos,k,dp);
+    }
+};
