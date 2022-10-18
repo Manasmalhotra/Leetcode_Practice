@@ -1,0 +1,29 @@
+You are given a 0-indexed string s consisting of only lowercase English letters, where each letter in s appears exactly twice. You are also given a 0-indexed integer array distance of length 26.
+
+Each letter in the alphabet is numbered from 0 to 25 (i.e. 'a' -> 0, 'b' -> 1, 'c' -> 2, ... , 'z' -> 25).
+
+In a well-spaced string, the number of letters between the two occurrences of the ith letter is distance[i]. If the ith letter does not appear in s, then distance[i] can be ignored.
+
+Return true if s is a well-spaced string, otherwise return false
+
+TC:O(N)
+SC:O(1)
+
+class Solution {
+public:
+    bool checkDistances(string s, vector<int>& distance) {
+        int i,n=s.length();
+        for(i=0;i<n;i++){
+            if(i+distance[s[i]-'a']+1>=n){
+                return false;// Distance exceeds n : Not possible to reach.
+            }
+            else if(distance[s[i]-'a']!=-1 && s[i+distance[s[i]-'a']+1]!=s[i]){
+                return false; // Check letter should not be visited, then check if letter t i is present at dist[i]+1 index, thus dist holds correct or not
+            }
+            else{
+                distance[s[i]-'a']=-1;//Mark visited if letter satifies our condition
+            }
+        }
+        return true;
+    }
+};
