@@ -1,0 +1,58 @@
+You are given a 0-indexed array of strings garbage where garbage[i] represents the assortment of garbage at the ith house. garbage[i] consists only of the characters 'M', 'P' and 'G' representing one unit of metal, paper and glass garbage respectively. Picking up one unit of any type of garbage takes 1 minute.
+
+You are also given a 0-indexed integer array travel where travel[i] is the number of minutes needed to go from house i to house i + 1.
+
+There are three garbage trucks in the city, each responsible for picking up one type of garbage. Each garbage truck starts at house 0 and must visit each house in order; however, they do not need to visit every house.
+
+Only one garbage truck may be used at any given moment. While one truck is driving or picking up garbage, the other two trucks cannot do anything.
+
+Return the minimum number of minutes needed to pick up all the garbage.
+
+
+
+
+Approach: Traverse each index i and its string garbage[i], get total units of garbage and also maintain the last index till which truck has to go so as to add travel cost accordingly.
+TC:O(N)
+SC:O(1)
+
+
+class Solution {
+public:
+    int garbageCollection(vector<string>& garbage, vector<int>& travel) {
+        int i,j,n=garbage.size(),countg=0,countp=0,countm=0,last_g=0,last_m=0,last_p=0;
+        for(i=0;i<n;i++){
+    
+            for(j=0;j<garbage[i].length();j++){
+                if(garbage[i][j]=='G'){
+                    countg+=1;
+                    last_g=i;
+                }
+                else if(garbage[i][j]=='P'){
+                    countp+=1;
+                    last_p=i;
+                }
+                else{
+                    countm+=1;
+                    last_m=i;
+                }
+          }
+     }
+      int sumg=0,sump=0,summ=0,m=travel.size();
+      for(i=0;i<m;i++){
+          if(i<=last_g-1){
+          sumg+=travel[i];
+          }
+          if(i<=last_m-1){
+              summ+=travel[i];
+          }
+          if(i<=last_p-1){
+              sump+=travel[i];
+          }
+      }
+        //cout<<sumg<<" "<<countg<<endl;
+        //cout<<sump<<" "<<countp<<endl;
+        //cout<<summ<<" "<<countm<<endl;
+        
+        return sumg+summ+sump+countg+countp+countm;
+    }
+};
