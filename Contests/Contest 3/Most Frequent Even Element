@@ -29,3 +29,28 @@ public:
         return ele;
     }
 };
+
+
+class Solution {
+public:
+    int mostFrequentEven(vector<int>& nums) {
+        map<int,int>maps;
+        map<int,int>::iterator it;
+        int i,n=nums.size();
+        for(i=0;i<n;i++){
+            maps[nums[i]]+=1;
+        }
+        int ele,freq,ans=-1,maxx=INT_MIN;
+    for(it=maps.begin();it!=maps.end();it++){
+        ele=it->first;
+        freq=it->second;
+        if(ele%2==0){
+            if(maxx<freq){
+                ans=ele;
+                maxx=freq;
+            }
+        }
+    }
+        return ans;
+    }
+};
