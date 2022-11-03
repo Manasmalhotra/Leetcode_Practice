@@ -1,0 +1,56 @@
+ Minimum Genetic Mutation
+ 
+ A gene string can be represented by an 8-character long string, with choices from 'A', 'C', 'G', and 'T'.
+
+Suppose we need to investigate a mutation from a gene string startGene to a gene string endGene where one mutation is defined as one single character changed in the gene string.
+
+For example, "AACCGGTT" --> "AACCGGTA" is one mutation.
+There is also a gene bank bank that records all the valid gene mutations. A gene must be in bank to make it a valid gene string.
+
+Given the two gene strings startGene and endGene and the gene bank bank, return the minimum number of mutations needed to mutate from startGene to endGene. If there is no such a mutation, return -1.
+
+Note that the starting point is assumed to be valid, so it might not be included in the bank.
+
+
+Example 1:
+
+Input: startGene = "AACCGGTT", endGene = "AACCGGTA", bank = ["AACCGGTA"]
+Output: 1
+
+Approach: Traverse by changing each ith character with all possibilities A,G,T and C. After replacement check if that word occurs in given list bank
+(as it will be valid only then as per question). If valid insert in queue and when it pops from queue again repeat the same process.
+
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) {
+       queue<string>q;
+       unordered_set<string>s;
+      q.push(start);
+        s.insert(start);
+        int i,j,steps=0;
+        string str="ACGT";
+        
+        while(!q.empty()){
+            int n=q.size();
+            while(n--){
+                string res=q.front();
+                q.pop();
+                if(res==end){
+                    return steps;
+                }
+                for(i=0;i<str.length();i++){
+                    for(j=0;j<res.length();j++){
+                        string neighbour=res;
+                        neighbour[j]=str[i];
+                        if(!s.count(neighbour) && find(bank.begin(),bank.end(),neighbour)!=bank.end()){
+                            q.push(neighbour);
+                            s.insert(neighbour);
+                        }
+                    }
+                }
+            }
+            steps++;
+        }
+        return -1;
+    }
+};
