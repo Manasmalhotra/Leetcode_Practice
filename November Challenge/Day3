@@ -1,0 +1,61 @@
+https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+
+You are given an array of strings words. Each element of words consists of two lowercase English letters.
+
+Create the longest possible palindrome by selecting some elements from words and concatenating them in any order. Each element can be selected at most once.
+
+Return the length of the longest palindrome that you can create. If it is impossible to create any palindrome, return 0.
+
+A palindrome is a string that reads the same forward and backward.
+
+Example 1:
+
+Input: words = ["lc","cl","gg"]
+Output: 6
+Explanation: One longest palindrome is "lc" + "gg" + "cl" = "lcggcl", of length 6.
+Note that "clgglc" is another longest palindrome that can be created.
+
+
+Approach: If a string is palindrome: if it occurs even times include as many as they come. If they come odd timesinclude number ofpairs tha can be extrcted and at last just one palindrome with odd.
+If string is not palindrome and has its reverse in map then include min(word,reverse(word)) so that each pair can be matched up and form palindrme. If palindrome not presentstring
+cannot be included.
+
+class Solution {
+public:
+    int longestPalindrome(vector<string>& words) {
+        int i,n=words.size(),count=0,maxx=INT_MIN,f=0;
+        map<string,int>maps;
+        map<string,int>::iterator it;
+        for(i=0;i<n;i++){
+           maps[words[i]]+=1;
+       }
+      
+       for(it=maps.begin();it!=maps.end();it++){
+           string res=it->first;
+           reverse(res.begin(),res.end());
+           if(maps.find(res)==maps.end()){
+               continue;
+           }
+           else{
+               if(res==it->first){
+                  if(maps[res]%2==0){
+                     count+=(2*maps[res]);   
+                  }
+                  else{
+                      count+=2*(maps[res]-1);
+                      f=1;
+                  }
+               }
+               else{
+                   count+=4*min(maps[res],it->second);
+                   maps[it->first]=0;
+                   maps[res]=0;
+               }
+       } 
+    }
+        if(f==1){
+            count+=2;
+        }
+        return count;
+    }
+};
