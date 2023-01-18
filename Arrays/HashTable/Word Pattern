@@ -1,0 +1,58 @@
+//https://leetcode.com/problems/word-pattern/description/
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s.
+
+ 
+
+Example 1:
+
+Input: pattern = "abba", s = "dog cat cat dog"
+Output: true
+
+Approach: First seperate s on basis of whitespaces. Then Make a hashmap for matching characters and words. Also maintain a hashset for words, so that if a character 
+has not been encountered yet but the word has been associated with a same character, we can return false(due one-one mapping). If character is there then we match
+the string stored for character with that of current string. If none is there we insert the pair.
+
+TC:O(N)
+SC:O(N)
+N: Length of ppatern.
+
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        map<char,string>maps;
+        unordered_set<string>waps;
+        int i,n=pattern.length();
+        vector<string>result;
+        string res;
+        for(i=0;i<s.length();i++){
+            if(s[i]==' '){
+                result.push_back(res);
+                res="";
+            }
+            else{
+                res+=s[i];
+            }
+        }
+        result.push_back(res);
+        if(n!=result.size()){
+            return false;
+        }
+        for(i=0;i<n;i++){
+            if(maps.find(pattern[i])==maps.end() && waps.find(result[i])!=waps.end()){
+                return false;
+            }
+            else if(maps.find(pattern[i])!=maps.end()){
+                if(maps[pattern[i]]!=result[i]){
+                   return false;
+                }
+            }
+            else{
+                maps[pattern[i]]=result[i];
+                waps.insert(result[i]);
+            }
+        }
+        return true;
+    }
+};
