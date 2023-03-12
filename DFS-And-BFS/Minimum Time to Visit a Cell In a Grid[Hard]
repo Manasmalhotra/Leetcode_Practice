@@ -1,0 +1,43 @@
+You are given a m x n matrix grid consisting of non-negative integers where grid[row][col] represents the minimum time required to be able to visit the cell (row, col), which means you can visit the cell (row, col) only when the time you visit it is greater than or equal to grid[row][col].
+
+You are standing in the top-left cell of the matrix in the 0th second, and you must move to any adjacent cell in the four directions: up, down, left, and right. Each move you make takes 1 second.
+
+Return the minimum time required in which you can visit the bottom-right cell of the matrix. If you cannot visit the bottom-right cell, then return -1.
+
+Approach: To go forth and back time calculation if you have to cover even distance then grid[newr][newc]+1 distance will be covered else grid[newr][newc] will be covered.
+
+class Solution {
+public:
+    int minimumTime(vector<vector<int>>& grid) {
+       int i,n=grid.size(),m=grid[0].size();
+       if (grid[0][1] > 1 && grid[1][0] > 1) {
+            return -1;
+        }
+       vector<vector<int> >vis(n,vector<int>(m,0));
+       vector<int>dirx={-1,1,0,0};
+       vector<int>diry={0,0,-1,1};
+       priority_queue<vector<int>,vector<vector<int> >,greater<> >pq;
+       pq.push({0,0,0});
+       while(!pq.empty()){
+           vector<int> temp=pq.top();
+           pq.pop();
+           int time=temp[0];
+           int row=temp[1];
+           int col=temp[2];
+           if(row==n-1 && col==m-1){
+               return time;
+           }
+           for(i=0;i<4;i++){
+               int newrow=row+dirx[i];
+               int newcol=col+diry[i];
+               if(newrow>=0 && newrow<n && newcol>=0 && newcol<m && vis[newrow][newcol]==0){
+                   vis[newrow][newcol]=1;
+                   bool wait=(grid[newrow][newcol]-time)%2==0;
+                   int nt=max(grid[newrow][newcol]+wait,time+1);
+                   pq.push({nt,newrow,newcol});
+               }
+           }
+       }
+       return -1;
+    }
+};
