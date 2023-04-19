@@ -1,0 +1,40 @@
+https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+
+Approach: Faced issue for not counting edges with similar direction but still moving in that direction to explore.
+          Solved it by resetting the steps taken to 1 every time we go in same direction as the previous one.
+TC:O(N) SC:O(H)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int pathLength=0;
+    void dfs(TreeNode*root,int dir,int steps){
+        if(root==NULL){
+            return;
+        }
+        if(dir==1){
+            dfs(root->right,dir,1);
+            dfs(root->left,1-dir,steps+1);
+        }
+        else{
+            dfs(root->left,dir,1);
+            dfs(root->right,1-dir,steps+1);
+        }
+        pathLength=max(pathLength,steps);
+    }
+    int longestZigZag(TreeNode* root) {
+        dfs(root,0,0);
+        dfs(root,1,0);
+        return pathLength;
+    }
+};
