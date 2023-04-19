@@ -1,0 +1,36 @@
+https://leetcode.com/problems/maximum-value-of-k-coins-from-piles/
+
+Approach: 
+Now this is a DP problem as Greedy does not work here and it is a optimisation problem.
+Greedy will not work as picking up the maximum is not alway optimal because you do not know anything about the coins of further indices of the piles.
+Also we have sub problems as you can take 0 to k coins from current pile and remaining ones from i-1th pile.
+These sub problems also overlap.
+
+The approach is to consider taking 0 to k coins from current pile and take rest from i-1th piles.
+We will cover all pile indies with this thing to get optimal answer.
+
+
+class Solution {
+public:
+    int solve(vector<vector<int>>&piles,vector<vector<int>>&dp,int index,int k){
+        if(index<0 || k==0){
+            return 0;
+        }
+        if(dp[index][k]!=-1){
+            return dp[index][k];
+        }
+
+        int i,j,value=0,ans=solve(piles,dp,index-1,k);
+        for(i=0;i<piles[index].size() && i<k;i++){
+              value=value+piles[index][i];
+              ans=max(ans,value+solve(piles,dp,index-1,k-i-1));
+        }
+        return dp[index][k]=ans;
+    }
+
+    int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+       int n=piles.size();
+       vector<vector<int> >dp(n,vector<int>(k+1,-1));
+       return solve(piles,dp,n-1,k); 
+    }
+};
