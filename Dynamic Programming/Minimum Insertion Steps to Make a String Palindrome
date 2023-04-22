@@ -1,0 +1,26 @@
+https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/description/
+
+Approach: We you observe carefuly the subsequence which is already a palindromeis not required to be touched instead we need to balance out the middle characters 
+which create problem in making string a complete palindrome.
+Thus answer is string.length-lcs(s,reverse(s))
+
+class Solution {
+public:
+    int minInsertions(string s) {
+       int i,j,n=s.length();
+       vector<vector<int> >dp(n+1,vector<int>(n+1,0));
+       string t=s;
+       reverse(t.begin(),t.end());
+       for(i=1;i<=n;i++){
+           for(j=1;j<=n;j++){
+             if(s[i-1]==t[j-1]){
+                 dp[i][j]=1+dp[i-1][j-1];
+             }
+             else{
+                 dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+             }
+           }
+       }
+       return s.length()-dp[n][n];  
+    }
+};
