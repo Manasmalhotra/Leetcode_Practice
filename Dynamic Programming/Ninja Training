@@ -1,0 +1,76 @@
+https://www.codingninjas.com/codestudio/problems/ninja-s-training_3621003?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTab=0
+
+Recursive
+
+#include<bits/stdc++.h>
+int ways(int n,int last,vector<vector<int>>&points){
+  if(n==0){
+     return 0;
+  }
+  int maxx=INT_MIN;
+  for(int i=0;i<3;i++){
+     if(i!=last){
+       maxx=max(maxx,points[n-1][i]+ways(n-1,i,points));
+     }
+  }
+  return maxx;
+}
+
+int ninjaTraining(int n, vector<vector<int>> &points)
+{
+   int a=points[n-1][0]+ways(n-1,0,points);
+   int b=points[n-1][1]+ways(n-1,1,points);
+   int c=points[n-1][2]+ways(n-1,2,points);
+   return max(a,max(b,c));
+}
+
+Bottom Up
+#include<bits/stdc++.h>
+
+int ninjaTraining(int n, vector<vector<int>> &points)
+{
+   int i,j,k;
+   vector<vector<int>>dp(n,vector<int>(3,0));
+   dp[0][0]=points[0][0];
+   dp[0][1]=points[0][1];
+   dp[0][2]=points[0][2];
+   for(i=1;i<n;i++){
+     for(j=0;j<3;j++){
+       int maxx=0;
+       for(k=0;k<3;k++){
+         if(j!=k){
+            maxx=max(maxx,dp[i-1][k]+points[i][j]);
+         }
+       }
+       dp[i][j]=maxx;
+     }
+   }
+   return max(dp[n-1][0],max(dp[n-1][1],dp[n-1][2])); 
+}
+
+Space Optimised
+#include<bits/stdc++.h>
+
+int ninjaTraining(int n, vector<vector<int>> &points)
+{
+   int i,j,k;
+   vector<int>prev(3,0);
+   vector<int>curr(3,0);
+   prev[0]=points[0][0];
+   prev[1]=points[0][1];
+   prev[2]=points[0][2];
+   
+   for(i=1;i<n;i++){
+     for(j=0;j<3;j++){
+       int maxx=0;
+       for(k=0;k<3;k++){
+         if(j!=k){
+            maxx=max(maxx,prev[k]+points[i][j]);
+         }
+       }
+       curr[j]=maxx;
+     }
+     prev=curr;
+   }
+   return max(prev[0],max(prev[1],prev[2])); 
+}
