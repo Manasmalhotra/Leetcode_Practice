@@ -1,0 +1,65 @@
+Approach: Just remember that with each node you must store the time needed to inform that node.
+We have to get maximum time as then all nodes will be in notified state.
+
+# DFS
+class Solution {
+public:
+    int maxTime = INT_MIN;
+    
+    void DFS(vector<int> adjList[], vector<int>& informTime, int curr, int time) {
+        // Maximum time for an employee to get the news.
+        maxTime = max(maxTime, time);
+        
+        for (int adjacent : adjList[curr]) { 
+            // Visit the subordinate employee who gets the news after informTime[curr] unit time.
+            DFS(adjList, informTime, adjacent, time + informTime[curr]);
+        }
+    }
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<int> adjList[n];
+        
+        // Making an adjacent list, each index stores the Ids of subordinate employees.
+        for (int i = 0; i < n; i++) {
+            if (manager[i] != -1) {
+                adjList[manager[i]].push_back(i);
+            }
+        }
+        
+        DFS(adjList, informTime, headID, 0);
+        return maxTime;
+    }
+};
+
+# BFS
+
+class Solution {
+public:
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<pair<int,int> >adj[n];
+        int i,j,maxx=0,time;
+        pair<int,int>temp;
+        
+        for(i=0;i<n;i++){
+            if(manager[i]!=-1){
+            adj[manager[i]].push_back({informTime[manager[i]],i});
+            }
+        }
+        queue<pair<int,int> >q;
+        q.push({0,headID});
+        while(!q.empty()){
+            temp=q.front();
+            q.pop();
+            time=temp.first;
+            i=temp.second;
+            if(adj[i].size()==0){
+                maxx=max(maxx,time);
+            }
+            else{
+            for(j=0;j<adj[i].size();j++){
+                q.push({time+adj[i][j].first,adj[i][j].second});
+            }
+            }
+        }
+        return maxx;
+    }
+};
