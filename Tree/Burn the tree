@@ -1,0 +1,166 @@
+//{ Driver Code Starts
+//Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+
+Node *buildTree(string str) {
+    // Corner Case
+    if (str.length() == 0 || str[0] == 'N')
+        return NULL;
+
+    // Creating vector of strings from input
+    // string after spliting by space
+    vector<string> ip;
+
+    istringstream iss(str);
+    for (string str; iss >> str;)
+        ip.push_back(str);
+
+    // Create the root of the tree
+    Node *root = new Node(stoi(ip[0]));
+
+    // Push the root to the queue
+    queue<Node *> queue;
+    queue.push(root);
+
+    // Starting from the second element
+    int i = 1;
+    while (!queue.empty() && i < ip.size()) {
+
+        // Get and remove the front of the queue
+        Node *currNode = queue.front();
+        queue.pop();
+
+        // Get the current Node's value from the string
+        string currVal = ip[i];
+
+        // If the left child is not null
+        if (currVal != "N") {
+
+            // Create the left child for the current Node
+            currNode->left = new Node(stoi(currVal));
+
+            // Push it to the queue
+            queue.push(currNode->left);
+        }
+
+        // For the right child
+        i++;
+        if (i >= ip.size())
+            break;
+        currVal = ip[i];
+
+        // If the right child is not null
+        if (currVal != "N") {
+
+            // Create the right child for the current Node
+            currNode->right = new Node(stoi(currVal));
+
+            // Push it to the queue
+            queue.push(currNode->right);
+        }
+        i++;
+    }
+
+    return root;
+}
+
+
+// } Driver Code Ends
+//User function Template for C++
+
+/*
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    
+    Node* findParent(Node*root,map<Node*,Node*>&parent,int target){
+        
+        if(root==NULL){
+            return root;
+        }
+        
+        queue<Node*>q;
+        q.push(root);
+        Node*temp,*res;
+        
+        while(!q.empty()){
+            temp=q.front();
+            q.pop();
+            if(temp->data==target){
+                res=temp;
+            }
+            if(temp->left!=NULL){
+                parent[temp->left]=temp;
+                q.push(temp->left);
+            }
+            if(temp->right!=NULL){
+                parent[temp->right]=temp;
+                q.push(temp->right);
+            }
+        }
+        return res;
+    }
+    
+    int minTime(Node* root, int target) 
+    {
+        map<Node*,Node*>parent;
+        Node *temp,*t=findParent(root,parent,target);
+        int time=0;
+        unordered_set<int>vis;
+        queue<Node*>q;
+        q.push(t);
+        vis.insert(t->data);
+        while(!q.empty()){
+            int n=q.size(),f=0;
+            while(n--){
+                temp=q.front();
+                q.pop();
+                
+                if(temp->left!=NULL && vis.find(temp->left->data)==vis.end()){
+                    vis.insert(temp->left->data);
+                    q.push(temp->left);
+                    f=1;
+                }
+                if(temp->right!=NULL && vis.find(temp->right->data)==vis.end()){
+                    vis.insert(temp->right->data);
+                    q.push(temp->right);
+                    f=1;
+                }
+                if(parent.find(temp)!=parent.end() && vis.find(parent[temp]->data)==vis.end()){
+                    vis.insert(parent[temp]->data);
+                    q.push(parent[temp]);
+                    f=1;
+                }
+            }
+            if(f==1){
+            time+=1;
+            }
+        }
+        return time;
+    }
+};
+
